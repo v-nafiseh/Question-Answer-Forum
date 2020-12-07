@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container border rounded text-right" style="margin-top:50px">
+        <h2>سوالت رو بپرس</h2>
+        <div class="row" >
+            <div class="col-md-12">
+
+                {% comment %} <form>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">عنوان</label>
+                      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+                      
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">متن</label>
+                      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+                    </div>
+                  
+                    <button type="submit" class="btn btn-primary">ثبت</button>
+                  </form> {% endcomment %}
+
+                    <form method="POST" class="post-form text-center">{% csrf_token %}
+                         {{ form.as_p }}
+                         <button type="submit" class="save btn btn-primary">Save</button>
+                    </form>
+
+            </div>
+        </div>
+    </div>         
+{% endblock  %}

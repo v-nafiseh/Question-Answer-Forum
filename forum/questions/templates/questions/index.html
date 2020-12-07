@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5 p-5 my-5 border rounded text-right">
+    <div class="row">
+        <div class="col-10 ">
+            <a href="{% url 'ask' %}" class="btn btn-info ml-5 ">سوالتو بپرس</a>
+        </div>
+    </div>    
+
+</div>
+
+
+{% for q in questions %}
+    <div class="container mt-5 border rounded text-right">
+        <div class="row">
+            <div class="col-10 border-left">
+                <div class="my-2 text-primary"><h3><a href="#">{{q.title}}</a></h3></div>
+                <div class="mb-2">{{q.content}}</div>
+                <div class="d-inline">
+                    {% for cat in categories%}
+                        <a href="#" class="badge badge-info ml-2">{{cat}}</a>
+                    {% endfor %}   
+                </div>
+                <div class="text-left d-inline">
+                    <div>{{q.date_published}}</div>
+                    <div>
+                        <span>user</span>
+                        <span>logo</span>
+                    </div>
+                </div> 
+                
+            </div>
+            <div class="col-2 text-center">
+                <div class="m-4">
+                    <span class="d-block">{{q.answers.count}}</span>
+                    <span>‍پاسخ ها</span>
+                </div>
+                <div>
+                    <span class="d-block">0</span>
+                    <span>آراء</span>
+                </div>
+            </div>   
+        </div>
+    </div>
+
+{% endfor %}
+
+{% endblock  %}

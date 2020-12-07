@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{%block content%}
+
+
+    <div class="container mt-5 text-right">
+        <div class="row">
+            <div class="col-12"><h3>ow to deploy django that has numpy and tensorflow libraries using apache2 on aws?</h3> <hr></div>
+
+            <div class="col-10">I'm using apache2 to server my django wsgi. In my 000-default.conf file I've wrote WSGIApplicationGroup %{Global}%. BUt still the site is only loading. How to do it?</div>
+        
+            <div class="col-10  ">
+                {% comment %} <div class="my-2 text-primary"><h3>{{answer.content}}</h3></div> {% endcomment %}
+                <div class="mb-2">{{answer.content}}</div>
+                {% comment %} <div class="d-inline">
+                    {% for cat in categories%}
+                        <a href="#" class="badge badge-info ml-2">{{cat}}</a>
+                    {% endfor %}   
+                </div> {% endcomment %}
+                <div class="text-left d-inline">
+                    <div>{{answer.date_published}}</div>
+                    <div>
+                        <span>user</span>
+                        <span>logo</span>
+                    </div>
+                </div> 
+                
+            </div>
+            <div class="col-12 text-center">
+                {% comment %} <div class="m-4">
+                    <span class="d-block"></span>
+                    <span>‍پاسخ ها</span>
+                </div> {% endcomment %}
+                <div class="col-12 text-left">
+                    <span class="d-block">0</span>
+                    <span>آراء</span>
+                </div>
+            </div>   
+        </div>
+    </div>
+
+
+{% for answer in answers %}
+
+    <div class="container mt-5 border rounded text-right">
+        <div class="row">
+            <div class="col-10 border-left">
+                {% comment %} <div class="my-2 text-primary"><h3>{{answer.content}}</h3></div> {% endcomment %}
+                <div class="mb-2">{{answer.content}}</div>
+                {% comment %} <div class="d-inline">
+                    {% for cat in categories%}
+                        <a href="#" class="badge badge-info ml-2">{{cat}}</a>
+                    {% endfor %}   
+                </div> {% endcomment %}
+                <div class="text-left d-inline">
+                    <div>{{answer.date_published}}</div>
+                    <div>
+                        <span>user</span>
+                        <span>logo</span>
+                    </div>
+                </div> 
+                
+            </div>
+            <div class="col-2 text-center">
+                {% comment %} <div class="m-4">
+                    <span class="d-block"></span>
+                    <span>‍پاسخ ها</span>
+                </div> {% endcomment %}
+                <div>
+                    <span class="d-block">0</span>
+                    <span>آراء</span>
+                </div>
+            </div>   
+        </div>
+    </div>
+
+{% endfor %}
+
+{% endblock %}
