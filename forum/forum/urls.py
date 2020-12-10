@@ -8,4 +8,4 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
 ]
 
-urlpatterns += staticfiles_urlpatterns 
+urlpatterns += staticfiles_urlpatterns()

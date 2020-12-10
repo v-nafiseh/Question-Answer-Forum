@@ -19,8 +19,8 @@
                 <div class="my-2 text-primary"><h3><a href="{%url 'questions:q_id' q_id=q.id%}">{{q.title}}</a></h3></div>
                 <div class="mb-2">{{q.snippet}}</div>
                 <div class="d-inline">
-                    {% for cat in categories%}
-                        <a href="#" class="badge badge-info ml-2">{{cat}}</a>
+                    {% for tag in q.tags.all%}
+                        <a href="#" class="badge badge-info ml-2">{{tag}}</a>
                     {% endfor %}   
                 </div>
                 <div class="text-left d-inline">
@@ -34,7 +34,7 @@
             </div>
             <div class="col-2 text-center">
                 <div class="m-4">
-                    <span class="d-block">{{q.answers.count}}</span>
+                    <span class="d-block">{{q.answer_set.all.count}}</span>
                     <span>‍پاسخ ها</span>
                 </div>
                 <div>

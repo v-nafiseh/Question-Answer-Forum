@@ -10,11 +10,11 @@ def index(request):
 
     questions = models.Question.objects.filter(status='published')
 
-    for q in questions:
-        answers = models.Answer.objects.filter(question_id = q.id)
-        tags = q.tags.all()
+    # for q in questions:
+    #     answers = models.Answer.objects.filter(question_id = q.id)
+    #     tags = q.tags.all()
 
-    context = {'questions':questions, 'answers':answers, 'tags':tags}
+    context = {'questions':questions}
 
     return render(request, 'questions/index.html', context)
 
@@ -45,6 +45,7 @@ def question_detail(request, q_id):
     }
 
     return render(request, 'questions/question_detail.html', context)
+
 
 def about_us(request):
     return HttpResponse("this is about us")
