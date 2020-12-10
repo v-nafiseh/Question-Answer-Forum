@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-class Category(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -24,7 +24,7 @@ class Question(models.Model):
     date_published = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     votes = models.IntegerField(default=0)
-    categories = models.ManyToManyField(Category)  
+    tags = models.ManyToManyField(Tag)  
     status = models.CharField(max_length=15, choices=STATUS)
 
     class Meta:
@@ -33,6 +33,9 @@ class Question(models.Model):
     
     def __str__(self):
         return f'{self.title}'
+
+    def snippet(self):
+        return self.content[:100] + '...'
 
 
 

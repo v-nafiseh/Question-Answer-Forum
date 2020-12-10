@@ -12,9 +12,9 @@ def index(request):
 
     for q in questions:
         answers = models.Answer.objects.filter(question_id = q.id)
-        categories = q.categories.all()
+        tags = q.tags.all()
 
-    context = {'questions':questions, 'answers':answers, 'categories':categories}
+    context = {'questions':questions, 'answers':answers, 'tags':tags}
 
     return render(request, 'questions/index.html', context)
 
@@ -37,7 +37,7 @@ def ask_question(request):
 def question_detail(request, q_id):
 
     question = models.Question.objects.get(id=q_id)
-    answers = question.answer_set.all()
+    answers = question.answer_set.all() #answer_set is the related name for the questions_id foreign key in Answer table
 
     context = {
         'question':question,
