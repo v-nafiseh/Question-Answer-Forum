@@ -7,7 +7,7 @@
         <div class="row" >
             <div class="col-md-12">
 
-                {% comment %} <form>
+                <!-- {% comment %} <form>
                     <div class="form-group">
                       <label for="exampleInputEmail1">عنوان</label>
                       <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
@@ -21,10 +21,18 @@
                     <button type="submit" class="btn btn-primary">ثبت</button>
                   </form> {% endcomment %}
 
-                    <form method="POST" class="post-form text-center">{% csrf_token %}
+                    {% comment %} <form method="POST" class="post-form text-center" action="{%url 'questions:ask'%}">
+                         {% csrf_token %}
                          {{ form.as_p }}
-                         <button type="submit" class="save btn btn-primary">Save</button>
+                         <input type="submit" class="save btn btn-primary" value="ثبت">
+                    </form> {% endcomment %} -->
+                    <form method="POST"> {%csrf_token%}
+                      {{form.as_p}}
+                      <input type="submit" value="ثبت"/>
                     </form>
+
+                    
+                    
 
             </div>
         </div>

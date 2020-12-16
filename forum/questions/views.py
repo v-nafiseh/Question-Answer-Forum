@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from . import models
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import DisplayForm
 
 
@@ -22,16 +22,34 @@ def index(request):
 
 def ask_question(request):
 
-    # if request.method == "POST":
+    if request.method == "POST":
         form = DisplayForm(request.POST)
-        # if form.is_valid():
+        if form.is_valid():
+            form.save()
+            return redirect("../")
+
+    else:
+        form = DisplayForm()    
+
+    return render(request, 'questions/ask.html', {'form':form})    
+
+    # if request.method == "POST":
+    #     form = DisplayForm(request.POST)
+    #     if form.is_valid():
+    #        post = form.save()
+    #        post.author = request.user
+    #        post.save()
+    #        return redirect("../")
+
+
         #     post = form.save(commit=False)
         #     post.author = request.user
         #     post.published_date = timezone.now()
         #     post.save()
         #     return redirect('questions/index.html', pk=post.pk)
-        # else:
-        return render(request, 'questions/ask.html', {'form':form})    
+    # else:
+    #     form = DisplayForm()
+    # return render(request, 'questions/ask.html', {'form':form})    
 
 
 def question_detail(request, q_id):
