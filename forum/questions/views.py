@@ -1,22 +1,33 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from . import models
+from .models import Question, Answer, Tag
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import DisplayForm
+from django.views.generic import ListView, DetailView
 
 
-def index(request):
+# def index(request):
 
-    questions = models.Question.objects.filter(status='published')
+#     questions = models.Question.objects.filter(status='published')
 
-    # for q in questions:
-    #     answers = models.Answer.objects.filter(question_id = q.id)
-    #     tags = q.tags.all()
 
-    context = {'questions':questions}
+#     context = {'questions':questions}
 
-    return render(request, 'questions/index.html', context)
+#     return render(request, 'questions/index.html', context)
+
+
+class IndexView(ListView):
+     model = Question
+     template_name = 'questions/index.html'
+
+    #  def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get the context
+    #     context = super(IndexView, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     # context['some_data'] = 'This is just some data'
+    #     return context
+    
 
 
 
@@ -54,7 +65,7 @@ def ask_question(request):
 
 def question_detail(request, q_id):
 
-    question = models.Question.objects.get(id=q_id)
+    question = Question.objects.get(id=q_id)
     answers = question.answer_set.all() #answer_set is the related name for the questions_id foreign key in Answer table
 
     context = {
@@ -63,6 +74,18 @@ def question_detail(request, q_id):
     }
 
     return render(request, 'questions/question_detail.html', context)
+
+
+# class QuestionDetailView(DetailView):
+#     template_name = 'questions/question_detail.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["answers"] =  
+#         return context
+    
+    
+
 
 
 def about_us(request):

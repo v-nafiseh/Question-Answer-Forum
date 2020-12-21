@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 
     <div class="container border rounded text-right" style="margin-top:50px">
@@ -27,8 +29,11 @@
                          <input type="submit" class="save btn btn-primary" value="ثبت">
                     </form> {% endcomment %} -->
                     <form method="POST"> {%csrf_token%}
-                      {{form.as_p}}
-                      <input type="submit" value="ثبت"/>
+
+                       {{form.media}}
+                      
+                      {{form|crispy}}
+                      <input type="submit" class="save btn btn-primary" value="ثبت"/>
                     </form>
 
                     

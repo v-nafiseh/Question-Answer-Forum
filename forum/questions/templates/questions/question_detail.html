@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-12"><h3>{{question.title}}</h3> <hr></div>
 
-            <div class="col-10">{{question.content}}</div>
+            <div class="col-10">{{question.content|safe}}</div>
         
             <div class="col-10  ">
                 {% comment %} <div class="my-2 text-primary"><h3>{{answer.content}}</h3></div> {% endcomment %}
