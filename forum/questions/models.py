@@ -4,8 +4,14 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
 
+
 class Tag(models.Model):
-    name = models.CharField(max_length=50, verbose_name='نام')
+    name = models.CharField(max_length=50, verbose_name='برچسب')
+    date_created = models.DateTimeField(auto_now=True, null=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'برچسب'
+        verbose_name_plural = 'برچسب ها'
 
     def __str__(self):
         return self.name

@@ -18,8 +18,12 @@ from django.views.generic import ListView, DetailView
 
 
 class IndexView(ListView):
-     model = Question
      template_name = 'questions/index.html'
+     context_object_name = 'questions'
+
+     def get_queryset(self):
+         return Question.objects.filter(status='published')
+     
 
     #  def get_context_data(self, **kwargs):
     #     # Call the base implementation first to get the context
@@ -63,28 +67,34 @@ def ask_question(request):
     # return render(request, 'questions/ask.html', {'form':form})    
 
 
-def question_detail(request, q_id):
+# def question_detail(request, q_id):
 
-    question = Question.objects.get(id=q_id)
-    answers = question.answer_set.all() #answer_set is the related name for the questions_id foreign key in Answer table
+#     question = Question.objects.get(id=q_id)
+#     answers = question.answer_set.all() #answer_set is the related name for the questions_id foreign key in Answer table
 
-    context = {
-        'question':question,
-        'answers':answers,
-    }
+#     context = {
+#         'question':question,
+#         'answers':answers,
+#     }
 
-    return render(request, 'questions/question_detail.html', context)
+#     return render(request, 'questions/question_detail.html', context)
 
 
-# class QuestionDetailView(DetailView):
-#     template_name = 'questions/question_detail.html'
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = 'questions/question_detail.html'
+    context_object_name = 'question'
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["answers"] =  
-#         return context
-    
-    
+    def get_queryset(self):
+        question = super().get_queryset()
+        return question.get(pk=self.kwargs['pk'])
+
+
+    def get_context_data(self,*args, **kwargs):
+        answers = self.get_queryset().answer_set.all()
+        context = super(QuestionDetailView, self).get_context_data(*args, **kwargs)
+        context['answers'] = answers
+        return context
 
 
 
