@@ -22,8 +22,7 @@ class IndexView(ListView):
      context_object_name = 'questions'
 
      def get_queryset(self):
-         return Question.objects.filter(status='published')
-     
+         return Question.objects.all()
 
     #  def get_context_data(self, **kwargs):
     #     # Call the base implementation first to get the context
@@ -80,22 +79,21 @@ def ask_question(request):
 #     return render(request, 'questions/question_detail.html', context)
 
 
+
 class QuestionDetailView(DetailView):
-    model = Question
     template_name = 'questions/question_detail.html'
     context_object_name = 'question'
+    
+    def get_object(self):
+        id_=self.kwargs.get("id")
+        return get_object_or_404(Question, id=id_)
 
-    def get_queryset(self):
-        question = super().get_queryset()
-        return question.get(pk=self.kwargs['pk'])
-
-
-    def get_context_data(self,*args, **kwargs):
-        answers = self.get_queryset().answer_set.all()
-        context = super(QuestionDetailView, self).get_context_data(*args, **kwargs)
-        context['answers'] = answers
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        answers = self.get_object().answer_set.all()
+        context["answers"] = answers
         return context
-
+        
 
 
 def about_us(request):
