@@ -2,14 +2,12 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
+from django.urls import reverse
 
 
 
 class Tag(models.Model):
-
-    # TAGS = ('python','django')
-
-    name = models.CharField(max_length=50, verbose_name='برچسب')
+    name = models.CharField(max_length=30, verbose_name='برچسب')
     date_created = models.DateTimeField(auto_now=True, null=True, verbose_name='تاریخ ایجاد')
 
     class Meta:
@@ -27,16 +25,15 @@ class Question(models.Model):
     #     ('draft', 'draft'),
     # )
 
-    title = models.CharField(max_length=255,null=True, verbose_name='عنوان')
+    title = models.CharField(max_length=255, null=True, verbose_name='عنوان')
     content = RichTextField(max_length=1000, verbose_name='محتوا')
-    date_created = models.DateTimeField(auto_now_add=True,null=True, verbose_name='تاریخ ایجاد')
-    date_updated = models.DateTimeField(auto_now=True,null=True, verbose_name='تاریخ ویرایش')
+    date_created = models.DateTimeField(auto_now_add=True, null=True, default=timezone.now, verbose_name='تاریخ ایجاد')
+    date_updated = models.DateTimeField(auto_now=True, null=True, default=timezone.now, verbose_name='تاریخ ویرایش')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, default=None, verbose_name='نویسنده')
-    tags = models.ManyToManyField(Tag, null=True, verbose_name='تگ ها')  
+    tags = models.ManyToManyField(Tag, null=True, unique=True, verbose_name='تگ ها')  
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     # status = models.CharField(max_length=15, null=True, blank=True, choices=STATUS, verbose_name='وضعیت')
-
-
-   
 
     class Meta:
         unique_together = [['title', 'content']]
@@ -49,9 +46,21 @@ class Question(models.Model):
     def snippet(self):
         return self.content[:100] + '...'
 
+    def get_absolute_url(self):    
+        return reverse("questions:ask", kwargs={"id": self.id}) 
+        
 
-class category:
-    pass 
+
+class Category:
+    name = models.CharField(max_length=30, verbose_name='دسته بندی')
+    date_created = models.DateTimeField(auto_now=True, verbose_name='تاریخ ایجاد')
+
+    class Meta:
+        verbose_name = 'دسته بندی '
+        verbose_name_plural = 'دسته بندی ها'
+
+class Comment:
+    pass
 
 
 
