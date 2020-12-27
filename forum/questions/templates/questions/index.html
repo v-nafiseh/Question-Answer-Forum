@@ -16,7 +16,7 @@
     <div class="container mt-3 border rounded text-right">
         <div class="row">
             <div class="col-10 border-left">
-                <div class="my-2 text-primary"><h3><a href="{%url 'questions:pk' pk=q.id%}">{{q.title}}</a></h3></div>
+                <div class="my-2 text-primary"><h3><a href="{%url 'questions:id' id=q.id%}">{{q.title}}</a></h3></div>
                 <div class="mb-2">{{q.snippet|safe}}</div>
                 <div class="d-inline">
                     {% for tag in q.tags.all%}
