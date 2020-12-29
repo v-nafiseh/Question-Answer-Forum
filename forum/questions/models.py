@@ -27,10 +27,10 @@ class Question(models.Model):
 
     title = models.CharField(max_length=255, null=True, verbose_name='عنوان')
     content = RichTextField(max_length=1000, verbose_name='محتوا')
-    date_created = models.DateTimeField(auto_now_add=True, null=True, default=timezone.now, verbose_name='تاریخ ایجاد')
-    date_updated = models.DateTimeField(auto_now=True, null=True, default=timezone.now, verbose_name='تاریخ ویرایش')
+    date_created = models.DateTimeField(auto_now_add=True, null=True, verbose_name='تاریخ ایجاد')
+    date_updated = models.DateTimeField(auto_now=True, null=True, verbose_name='تاریخ ویرایش')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, default=None, verbose_name='نویسنده')
-    tags = models.ManyToManyField(Tag, null=True, unique=True, verbose_name='تگ ها')  
+    tags = models.ManyToManyField(Tag, blank=True, verbose_name='تگ ها')  
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     # status = models.CharField(max_length=15, null=True, blank=True, choices=STATUS, verbose_name='وضعیت')
