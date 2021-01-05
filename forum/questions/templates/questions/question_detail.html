@@ -33,7 +33,9 @@
                 </div> {% endcomment %}
                 <div class="col-12 text-left">
                     <span class="d-block">0</span>
-                    <span>آراء</span>
+                    <span>
+                    <a class='like-btn'   href='{{ question.get_like_url }}'>{{ questions.likes.count }} Like</a>
+                    </span>
                 </div>
             </div>   
         </div>

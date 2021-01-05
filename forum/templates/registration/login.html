@@ -1,0 +1,49 @@
+
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-center form_container rounded text-right">
+					<form method="POST" action="">
+						{% csrf_token %}
+                        {{form.media}}
+						{{form|crispy}}
+						<input class="btn btn-primary login_btn" type="submit" value="ورود" <a href="{% url 'accounts:login' %}" class="ml-2"></a>
+						{% comment %} <div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+
+							<input type="text" name="نام کاربری" placeholder="نام کاربری" class="form-control">
+						</div>
+
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+
+								<input type="password" name="رمز عبور" placeholder="رمز عبور" class="form-control" >
+						</div>
+
+							<div class="d-flex justify-content-center mt-3 login_container">
+				 				<input class="btn login_btn" type="submit" value="ورود">
+				   			</div> {% endcomment %}
+					</form>
+
+				</div>
+
+				{% for message in messages %}
+					<p id="messages">{{message}}</p>
+				{% endfor %}			
+		
+				<div class="mt-4">
+					<div class="d-flex justify-content-center links">
+						حساب کاربری نداری؟ <a href="{% url 'accounts:register' %}" class="ml-2">عضویت</a>
+					</div>
+			
+				</div>
+
+                {% endblock  %}

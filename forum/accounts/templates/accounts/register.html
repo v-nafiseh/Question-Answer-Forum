@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+ <div class="d-flex justify-content-center form_container rounded text-right">
+					<form method="POST" action="">
+						{% csrf_token %}
+                        {{form.media}}
+						{{form|crispy}}
+						<input class="btn btn-primary login_btn" type="submit" value="عضویت" >
+					
+					</form>
+
+				</div>
+
+				{% for message in messages %}
+					<p id="messages">{{message}}</p>
+				{% endfor %}			
+		
+				<div class="mt-4">
+					<div class="d-flex justify-content-center links">
+						حساب کاربری داری؟ <a href="{% url 'accounts:login' %}" class="ml-2">ورود</a>
+					</div>
+			
+				</div> 
+
+                {% comment %} <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Join Today</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">register</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have An Account? <a class="ml-2" href="{% url 'accounts:login' %}">Sign In</a>
+            </small>
+        </div>
+    </div> {% endcomment %}
+
+                {% endblock  %}

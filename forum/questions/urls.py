@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:id>/', views.QuestionDetailView.as_view(), name='id'),
     path('', views.IndexView.as_view(), name='all_questions'),
     path('ask/', views.AskView.as_view(), name='ask'),
+    path('<int:id>/like/', views.QuestionLikeView.as_view(), name='q_like')
 
 ]

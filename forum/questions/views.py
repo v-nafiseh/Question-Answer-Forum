@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from .models import Question, Answer, Tag
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import DisplayForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from .forms import DisplayForm, UserForm
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
+from django.contrib.auth import authenticate, login
+from django.urls import reverse
 
 
 
@@ -21,6 +22,10 @@ class AskView(CreateView):
     template_name = 'questions/ask.html'
     queryset = Question.objects.all()
     form_class = DisplayForm
+    # model = Question
+    def get_success_url(self):
+        return reverse('questions:id', kwargs={'id':self.object.id})
+
 
 
 class QuestionDetailView(DetailView):
@@ -37,12 +42,41 @@ class QuestionDetailView(DetailView):
         context["answers"] = answers
         return context
 
-class UpdateView(UpdateView):
+
+
+
+class QuestionLikeView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        id_ = self.kwargs.get('id')
+        obj = get_object_or_404(Question, id=id_)
+        user = self.request.user
+        url = obj.get_absolute_url()
+        if user.is_authenticated:
+            if user in obj.likes.all():
+                obj.likes.remove(user)
+            else:
+                obj.likes.add(user) 
+        return url           
+
+
+class AnswerView(CreateView):
+    # template_name = 'questions/question_detail.html'
     pass
 
-class DeleteView(DetailView):
+class EditQuestion(UpdateView):
+    pass
+
+class DeleteQuestion(DetailView):
     pass
         
+
+class EditAnswer(UpdateView):
+    pass
+
+class DeleteAnswer(DeleteView):
+    pass
+
+
 
 
 def about_us(request):
@@ -95,5 +129,3 @@ def contact(request):
 #     }
 
 #     return render(request, 'questions/question_detail.html', context)
-
-           

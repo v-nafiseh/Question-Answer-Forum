@@ -25,21 +25,21 @@ class Question(models.Model):
     #     ('draft', 'draft'),
     # )
 
-    title = models.CharField(max_length=255, null=True, verbose_name='عنوان')
+    title = models.CharField(max_length=255,  verbose_name='عنوان')
     content = RichTextField(max_length=1000, verbose_name='محتوا')
-    date_created = models.DateTimeField(auto_now_add=True, null=True, verbose_name='تاریخ ایجاد')
-    date_updated = models.DateTimeField(auto_now=True, null=True, verbose_name='تاریخ ویرایش')
+    date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True, verbose_name='تاریخ ایجاد')
+    date_updated = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='تاریخ ویرایش')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, default=None, verbose_name='نویسنده')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='تگ ها')  
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, blank=True, related_name='question_likes', verbose_name='رای  ها')
+    # dislikes = models.IntegerField(default=0)
     # status = models.CharField(max_length=15, null=True, blank=True, choices=STATUS, verbose_name='وضعیت')
 
     class Meta:
         unique_together = [['title', 'content']]
         verbose_name = 'سوال'
         verbose_name_plural = 'سوال ها'
-    
+        ordering = ['-date_created']
     def __str__(self):
         return f'{self.title}'
 
@@ -47,7 +47,10 @@ class Question(models.Model):
         return self.content[:100] + '...'
 
     def get_absolute_url(self):    
-        return reverse("questions:ask", kwargs={"id": self.id}) 
+        return reverse("questions:id", kwargs={"id": self.id}) 
+
+    def get_like_url(self):
+        return reverse("questions:q_like", kwargs={"id":self.id})
         
 
 
