@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {%block content%}
 
 
-    <div class="container mt-5 text-right">
+    <div class="container mt-5 rounded text-right" style="margin-top:50px">
         <div class="row">
             <div class="col-12"><h3>{{question.title}}</h3> <hr></div>
 
@@ -20,8 +22,9 @@
                 <div class="text-left d-inline">
                     <div>{{answer.date_published}}</div>
                     <div>
-                        <span>user</span>
-                        <span>logo</span>
+                        {% comment %} <span>user</span>
+                        <span>logo</span> {% endcomment %}
+
                     </div>
                 </div> 
                 
@@ -32,9 +35,8 @@
                     <span>‍پاسخ ها</span>
                 </div> {% endcomment %}
                 <div class="col-12 text-left">
-                    <span class="d-block">0</span>
                     <span>
-                    <a class='like-btn'   href='{{ question.get_like_url }}'>{{ questions.likes.count }} Like</a>
+                    <a class='like-btn'   href='{{ question.get_like_url }}'>{{ question.likes.count }} رای</a>
                     </span>
                 </div>
             </div>   
@@ -56,10 +58,10 @@
                 </div> {% endcomment %}
                 <div class="text-left d-inline">
                     <div>{{answer.date_published}}</div>
-                    <div>
+                    {% comment %} <div>
                         <span>user</span>
                         <span>logo</span>
-                    </div>
+                    </div> {% endcomment %}
                 </div> 
                 
             </div>
@@ -69,7 +71,7 @@
                     <span>‍پاسخ ها</span>
                 </div> {% endcomment %}
                 <div>
-                    <span class="d-block">0</span>
+                    <span class="d-block" <a href='{{ answer.get_like_url }}'>{{ answer.likes.count }} رای</a>></span>
                     <span>آراء</span>
                 </div>
             </div>   
@@ -77,5 +79,25 @@
     </div>
 
 {% endfor %}
+
+   <div class="container border rounded text-right" style="margin-top:50px">
+        {% if user is not None %}
+            <div class="col-12 col-md-6 pl-0 pl-md-3 pr-3">
+                <h3 class="white-important mb-3">
+                    پاسخت رو بنویس
+                </h3>
+                <form method="POST">
+                    {%csrf_token%}
+                    {% comment %} <fieldset class="form-group"> {% endcomment %}
+                        {{form.media}}
+                        {{ form|crispy }}
+                    {% comment %} </fieldset> {% endcomment %}
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">ثبت</button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
 
 {% endblock %}

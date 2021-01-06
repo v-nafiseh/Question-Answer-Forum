@@ -31,7 +31,7 @@ class Question(models.Model):
     date_updated = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='تاریخ ویرایش')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, default=None, verbose_name='نویسنده')
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='تگ ها')  
-    likes = models.ManyToManyField(User, blank=True, related_name='question_likes', verbose_name='رای  ها')
+    likes = models.ManyToManyField(User, blank=True, related_name='question_likes', verbose_name='رای ها')
     # dislikes = models.IntegerField(default=0)
     # status = models.CharField(max_length=15, null=True, blank=True, choices=STATUS, verbose_name='وضعیت')
 
@@ -40,6 +40,7 @@ class Question(models.Model):
         verbose_name = 'سوال'
         verbose_name_plural = 'سوال ها'
         ordering = ['-date_created']
+
     def __str__(self):
         return f'{self.title}'
 
@@ -50,7 +51,7 @@ class Question(models.Model):
         return reverse("questions:id", kwargs={"id": self.id}) 
 
     def get_like_url(self):
-        return reverse("questions:q_like", kwargs={"id":self.id})
+        return reverse("questions:like", kwargs={"id":self.id})
         
 
 
@@ -78,7 +79,7 @@ class Answer(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='نویسنده')
-    votes = models.IntegerField(default=0, verbose_name='آراء')
+    likes = models.ManyToManyField(User, blank=True, related_name='answer_likes', verbose_name='رای ها')
     content = models.TextField(verbose_name='محتوا')
     # status = models.CharField(max_length=15, choices=STATUS, verbose_name='وضعیت')
 
@@ -91,7 +92,10 @@ class Answer(models.Model):
         verbose_name_plural = 'پاسخ ها'    
     
 
+    def get_absolute_url(self):    
+        return reverse("questions:id", kwargs={"id": self.id}) 
   
-
+    def get_like_url(self):
+        return reverse("questions:like", kwargs={"id":self.id})
     
 

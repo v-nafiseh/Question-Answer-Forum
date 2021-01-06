@@ -13,9 +13,14 @@ class DisplayForm(forms.ModelForm):
         model = models.Question
         fields = ['title', 'content', 'tags', ]
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
+# class UserForm(forms.ModelForm):
+#     password = forms.CharField(widget=forms.PasswordInput)
 
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email', 'password', ]    
+
+class NewCommentForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'email', 'password', ]        
+        model = models.Answer
+        fields = ['content', ]         
