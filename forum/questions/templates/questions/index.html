@@ -25,10 +25,10 @@
                 </div>
                 <div class="text-left d-inline">
                     <div>{{q.date_published}}</div>
-                    <div>
+                    {% comment %} <div>
                         <span>user</span>
                         <span>logo</span>
-                    </div>
+                    </div> {% endcomment %}
                 </div> 
                 
             </div>
@@ -38,8 +38,8 @@
                     <span>‍پاسخ ها</span>
                 </div>
                 <div>
-                    <span class="d-block">0</span>
-                    <span>آراء</span>
+                    <span class="d-block">{{q.likes.count}}</span>
+                    <span>رای</span>
                 </div>
             </div>   
         </div>

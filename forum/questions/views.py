@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .forms import DisplayForm, NewCommentForm
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.contrib.auth import authenticate, login
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .forms import NewCommentForm
 from django.views.generic.edit import FormMixin, ModelFormMixin
 
@@ -26,7 +26,7 @@ class AskView(CreateView):
     form_class = DisplayForm
     # model = Question
     def get_success_url(self):
-        return reverse('questions:id', kwargs={'id':self.object.id})
+        return reverse('questions:id', kwargs={'id':self.object.id})    
 
 
 
@@ -42,53 +42,14 @@ class QuestionDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         answers = self.get_object().answer_set.all()
-        # context["form"] = NewCommentForm(initial={'id':self.object})
-        context["form"] = self.get_form()
+        context["form"] = NewCommentForm(initial={'question_id':self.object})
+        # context["form"] = self.get_form()
         context["answers"] = answers
         return context
 
     def get_success_url(self):
         return reverse('questions:detail', kwargs={'question_id':self.object.id}) 
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    # def form_valid(self, form):
-    #     form.save()
-    #     return super(ParticularPost, self).form_valid(form)        
-
-
-
-
-
-
-
-
-
-    # def create_answer(self, request, *args, **kwargs):
-    #     new_answer = Answer(content=request.POST.get('content'),
-    #                         author=self.request.user,
-    #                         question_id=self.get_object())   
-    #     new_answer.save() 
-
-    #     return self.get(self, request, *args, **kwargs)    
-
-    # def get_success_url(self):
-    #     return reverse('questions:id', kwargs={'id':self.object.id})                      
-
-
-
-class AnswerView(CreateView):
-    pass        
-
-class TagView(CreateView):
-    pass
 
 
 class LikeView(RedirectView):
@@ -105,30 +66,32 @@ class LikeView(RedirectView):
         return url 
 
 
-# class AnswerLikeView(RedirectView):
-#     def get_redirect_url(self, *args, **kwargs):
-#         id_ = self.kwargs.get('id')
-#         obj = get_object_or_404(Question, id=id_)
-#         user = self.request.user
-#         url = obj.get_absolute_url()
-#         if user.is_authenticated:
-#             if user in obj.likes.all():
-#                 obj.likes.remove(user)
-#             else:
-#                 obj.likes.add(user) 
-#         return url 
         
 
 
-class AnswerView(CreateView):
-    # template_name = 'questions/question_detail.html'
-    pass
+class UpdateQuestionView(UpdateView):
+    template_name = 'questions/ask.html'
+    queryset = Question.objects.all()
+    form_class = DisplayForm
+    # model = Question
+    def get_object(self):
+        id_=self.kwargs.get("id")
+        return get_object_or_404(Question, id=id_)
 
-class EditQuestion(UpdateView):
-    pass
+    def get_success_url(self):
+        return reverse('questions:id', kwargs={'id':self.object.id})
 
-class DeleteQuestion(DetailView):
-    pass
+
+
+class DeleteQuestion(DeleteView):
+    template_name = 'questions/delete.html'
+    queryset = Question.objects.all()
+    
+    def get_object(self):
+        id_=self.kwargs.get("id")
+        return get_object_or_404(Question, id=id_)
+
+    success_url = reverse_lazy('questions:all_questions')
         
 
 class EditAnswer(UpdateView):
@@ -137,7 +100,18 @@ class EditAnswer(UpdateView):
 class DeleteAnswer(DeleteView):
     pass
 
+class AnswerView(CreateView):
+    # template_name = 'questions/question_detail.html'
+    pass
 
+
+
+class AnswerView(CreateView):
+    pass        
+
+
+class TagView(CreateView):
+    pass
 
 
 def about_us(request):
@@ -190,3 +164,55 @@ def contact(request):
 #     }
 
 #     return render(request, 'questions/question_detail.html', context)
+
+# class AnswerLikeView(RedirectView):
+#     def get_redirect_url(self, *args, **kwargs):
+#         id_ = self.kwargs.get('id')
+#         obj = get_object_or_404(Question, id=id_)
+#         user = self.request.user
+#         url = obj.get_absolute_url()
+#         if user.is_authenticated:
+#             if user in obj.likes.all():
+#                 obj.likes.remove(user)
+#             else:
+#                 obj.likes.add(user) 
+#         return url 
+        
+  # def post(self, request, *args, **kwargs):
+    #     print('test')
+    #     self.object = self.get_object()
+    #     print('test')
+    #     form = self.get_form()
+    #     print('test')
+    #     if form.is_valid():
+    #         print('test valid')
+    #         return self.form_valid(form)
+    #         print('validated')
+    #     else:
+    #         return self.form_invalid(form)
+
+    # def form_valid(self, form):
+    #     answer = form.save(commit=False)
+    #     answer.created_by = self.request.user
+    #     answer.post = self.object
+    #     answer.save()
+    #     return super(QuestionDetailView, self).form_valid(form)      
+
+
+
+
+
+
+
+
+
+    # def create_answer(self, request, *args, **kwargs):
+    #     new_answer = Answer(content=request.POST.get('content'),
+    #                         author=self.request.user,
+    #                         question_id=self.get_object())   
+    #     new_answer.save() 
+
+    #     return self.get(self, request, *args, **kwargs)    
+
+    # def get_success_url(self):
+    #     return reverse('questions:id', kwargs={'id':self.object.id})                      

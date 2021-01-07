@@ -19,21 +19,21 @@
                         <a href="#" class="badge badge-info ml-2">{{cat}}</a>
                     {% endfor %}   
                 </div> {% endcomment %}
-                <div class="text-left d-inline">
+                <div class="text-right d-inline">
                     <div>{{answer.date_published}}</div>
                     <div>
-                        {% comment %} <span>user</span>
-                        <span>logo</span> {% endcomment %}
+                        <span><a class='btn btn-outline-primary'   href='{{question.get_update_url}}'>ویرایش</a></span>
+                        <span><a class='btn btn-outline-danger'   href='{{question.get_delete_url}}'>حذف</a></span>
 
                     </div>
                 </div> 
                 
             </div>
             <div class="col-12 text-center">
-                {% comment %} <div class="m-4">
-                    <span class="d-block"></span>
-                    <span>‍پاسخ ها</span>
-                </div> {% endcomment %}
+                 <div class="m-4">
+                    {% comment %} <span class="d-block"></span>
+                    <span>‍پاسخ ها</span> {% endcomment %}
+                </div> 
                 <div class="col-12 text-left">
                     <span>
                     <a class='like-btn'   href='{{ question.get_like_url }}'>{{ question.likes.count }} رای</a>
@@ -70,9 +70,10 @@
                     <span class="d-block"></span>
                     <span>‍پاسخ ها</span>
                 </div> {% endcomment %}
+                
                 <div>
                     <span class="d-block" <a href='{{ answer.get_like_url }}'>{{ answer.likes.count }} رای</a>></span>
-                    <span>آراء</span>
+                    
                 </div>
             </div>   
         </div>
@@ -81,7 +82,7 @@
 {% endfor %}
 
    <div class="container border rounded text-right" style="margin-top:50px">
-        {% if user is not None %}
+        {% comment %} {% if user is not None %} {% endcomment %}
             <div class="col-12 col-md-6 pl-0 pl-md-3 pr-3">
                 <h3 class="white-important mb-3">
                     پاسخت رو بنویس
@@ -97,7 +98,7 @@
                     </div>
                 </form>
             </div>
-        {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
     </div>
 
 {% endblock %}

@@ -52,6 +52,12 @@ class Question(models.Model):
 
     def get_like_url(self):
         return reverse("questions:like", kwargs={"id":self.id})
+
+    def get_update_url(self):
+        return reverse("questions:update", kwargs={"id":self.id})   
+
+    def get_delete_url(self):
+        return reverse("questions:delete", kwargs={"id":self.id})     
         
 
 
