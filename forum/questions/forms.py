@@ -9,9 +9,11 @@ class DisplayForm(forms.ModelForm):
     #     widget=forms.CharField(), 
     # )
 
+    tags = forms.CharField(max_length= 100,  required = False, widget=forms.Textarea(attrs={"rows":3, "cols":15}))
+
     class Meta:
         model = models.Question
-        fields = ['title', 'content', 'tags', ]
+        fields = ['title', 'content', 'category', ]
 
 # class UserForm(forms.ModelForm):
 #     password = forms.CharField(widget=forms.PasswordInput)

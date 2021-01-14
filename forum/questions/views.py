@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -9,6 +10,9 @@ from django.contrib.auth import authenticate, login
 from django.urls import reverse, reverse_lazy
 from .forms import NewCommentForm
 from django.views.generic.edit import FormMixin, ModelFormMixin
+from django.contrib.messages.views import SuccessMessageMixin
+
+
 
 
 
@@ -24,31 +28,94 @@ class AskView(CreateView):
     template_name = 'questions/ask.html'
     queryset = Question.objects.all()
     form_class = DisplayForm
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.author = self.request.user
+        instance.save()
+        tags = form.cleaned_data['tags'].lower()
+
+        # чтобы пользователь не заморачивался чем разделять теги
+        question_tags = re.sub('[.!,:;]', ' ', tags)
+
+        for eachtag in question_tags:
+            tag, created = Tag.objects.get_or_create(
+                name=eachtag)
+            tag.save()
+            instance.tags.add(tag)
+        form.save_m2m()
+
+        return HttpResponseRedirect(
+            reverse('questions:id', kwargs={'id':instance.id}))
+
+    def get_context_data(self, **kwargs):
+
+        context = super(AskView, self).get_context_data(**kwargs)
+        tags_list = [tag for tag in
+                     Tag.objects.values_list('name', flat=True)]
+        tags_string = ''
+        quote = '"'
+        for tag in tags_list:
+            tags_string += quote + tag + quote + ","
+        context['tags'] = tags_string
+        return context
+    
+
+
+
+
+
+
+
+
+
+
     # model = Question
-    def get_success_url(self):
-        return reverse('questions:id', kwargs={'id':self.object.id})    
+    # def post(self, request):
+    #     form = DisplayForm(request.POST):
+    #     if form.is_valid():
+    #         tags = form.get('tags')
+    #         tags = tags.split()
+    #         for tag in tags:
+    #             if Tag.objects.filter(name=tag).exists():
 
 
 
-class QuestionDetailView(FormMixin, DetailView):
+    # def get_success_url(self):
+    #     return reverse('questions:id', kwargs={'id':self.object.id})    
+
+
+
+class QuestionDetailView(ModelFormMixin, DetailView):
     template_name = 'questions/question_detail.html'
     context_object_name = 'question'
     form_class = NewCommentForm
-    
-    def get_object(self):
-        id_=self.kwargs.get("id")
-        return get_object_or_404(Question, id=id_)
+    model = Question
+    pk_url_kwarg = 'id'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        answers = self.get_object().answer_set.all()
-        context["form"] = NewCommentForm(initial={'question_id':self.object})
-        # context["form"] = self.get_form()
+        id_ = self.get_object().id
+        answers = Answer.objects.filter(question_id=id_)
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context["answers"] = answers
         return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # my_form = self.get_form()
+        my_form = NewCommentForm(request.POST or None)
+        if my_form.is_valid():
+            obj = my_form.save(commit=False)
+            obj.author = request.user
+            obj.question_id = Question.objects.get(id=id)
+            my_form.save()
+            return self.form_valid(my_form)
+        else:
+            return self.form_invalid(my_form)
 
     def get_success_url(self):
-        return reverse('questions:detail', kwargs={'question_id':self.object.id}) 
+        return reverse('questions:id', kwargs={'id':self.get_object().id})         
+
 
 
 
@@ -65,8 +132,6 @@ class LikeView(RedirectView):
                 obj.likes.add(user) 
         return url 
 
-
-        
 
 
 class UpdateQuestionView(UpdateView):
