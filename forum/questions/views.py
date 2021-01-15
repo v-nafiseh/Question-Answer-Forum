@@ -35,7 +35,6 @@ class AskView(CreateView):
         instance.save()
         tags = form.cleaned_data['tags'].lower()
 
-        # чтобы пользователь не заморачивался чем разделять теги
         question_tags = re.split("\s", tags)
 
         for eachtag in question_tags:
